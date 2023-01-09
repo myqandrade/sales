@@ -14,6 +14,7 @@ public class SalesApplication {
     @Bean
     public CommandLineRunner init(CustomerRepository customerRepository){
         return args -> {
+            System.out.println("Salvando clientes: ");
             Customer customer = new Customer();
             customer.setName("Mike");
             customerRepository.save(customer);
@@ -22,8 +23,35 @@ public class SalesApplication {
             customer2.setName("Mariana");
             customerRepository.save(customer2);
 
-            List<Customer> findALl = customerRepository.findAll();
-            findALl.forEach(System.out::println);
+            List<Customer> allCustomers = customerRepository.findAll();
+            allCustomers.forEach(System.out::println);
+
+            System.out.println("Atualizando clientes: ");
+
+            allCustomers.forEach(c -> {
+                c.setName(c.getName() + " atualizado");
+                customerRepository.update(c);
+            });
+
+            allCustomers.forEach(System.out::println);
+
+            System.out.println("Buscando clientes: ");
+
+            customerRepository.findByName("Mike").forEach(System.out::println);
+
+            System.out.println("Deletando clientes: ");
+            customerRepository.findAll().forEach(c -> {
+                customerRepository.delete(c);
+            });
+
+            allCustomers = customerRepository.findAll();
+
+            if(allCustomers.isEmpty()){
+                System.out.println("No costumers found");
+            }
+            else {
+                allCustomers.forEach(System.out::println);
+            }
         };
     }
     public static void main(String[] args) {

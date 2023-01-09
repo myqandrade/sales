@@ -7,6 +7,10 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(String name){
+        this.name = name;
+    }
+
     public Customer(String name, Integer id) {
         this.name = name;
         this.id = id;
