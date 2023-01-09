@@ -1,23 +1,30 @@
 package com.mike;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.mike.entities.Customer;
+import com.mike.repositories.CustomerRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.Bean;
+
+import java.util.List;
 
 @SpringBootApplication
-@RestController
 public class SalesApplication {
+    @Bean
+    public CommandLineRunner init(CustomerRepository customerRepository){
+        return args -> {
+            Customer customer = new Customer();
+            customer.setName("Mike");
+            customerRepository.save(customer);
 
-    @Autowired
-    @Qualifier("applicationName")
-    private String applicationName;
+            Customer customer2 = new Customer();
+            customer2.setName("Mariana");
+            customerRepository.save(customer2);
 
-    @GetMapping("/hello")
-    public String helloWorld(){
-        return applicationName;
+            List<Customer> findALl = customerRepository.findAll();
+            findALl.forEach(System.out::println);
+        };
     }
     public static void main(String[] args) {
         SpringApplication.run(SalesApplication.class, args);
